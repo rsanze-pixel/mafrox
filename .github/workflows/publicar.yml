@@ -1,0 +1,61 @@
+# ============================================================
+#  PUBLICACIÓN AUTOMÁTICA DE LA WEB (GitHub → hosting por FTP)
+#
+#  Cada vez que se sube un cambio a la rama "main", GitHub copia
+#  al hosting SOLO los archivos que cambiaron.
+#
+#  Datos que usa (se guardan como "secretos" en GitHub, nadie los ve):
+#    FTP_SERVER    → servidor FTP   (ej. ftp.mafrox.com.pe)
+#    FTP_USERNAME  → usuario FTP    (ej. deploy@mafrox.com.pe)
+#    FTP_PASSWORD  → clave de ese usuario FTP
+#  Dónde se cargan: GitHub → repositorio → Settings →
+#    Secrets and variables → Actions → New repository secret
+#
+#  Carpeta de destino: la cuenta FTP debe apuntar a public_html
+#  (por eso server-dir es "./"). Si se usa otra cuenta, cámbialo aquí.
+#
+#  Para publicar a mano: pestaña "Actions" → "Publicar web" → "Run workflow".
+#  Nada se borra del hosting salvo archivos que antes subió esta misma
+#  publicación y que luego se quitaron del repositorio.
+# ============================================================
+name: Publicar web
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revisar que los datos FTP ya estén cargados
+        id: datos
+        env:
+          SERVIDOR: ${{ secrets.FTP_SERVER }}
+        run: |
+          if [ -z "$SERVIDOR" ]; then
+            echo "Faltan los secretos FTP: no se publica nada todavía."
+            echo "listo=no" >> "$GITHUB_OUTPUT"
+          else
+            echo "listo=si" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Descargar los archivos del repositorio
+        if: steps.datos.outputs.listo == 'si'
+        uses: actions/checkout@v4
+
+      - name: Subir al hosting por FTP
+        if: steps.datos.outputs.listo == 'si'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ./
+          # Archivos que NO se suben al hosting
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            README.md

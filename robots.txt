@@ -1,0 +1,36 @@
+# robots.txt — qué pueden leer los buscadores y las IA en mafrox.com.pe
+# Se permite TODO a todos. Abajo se nombran los robots de IA para dejar
+# claro que también tienen permiso (ChatGPT, Claude, Gemini, Perplexity).
+
+User-agent: *
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Mapa del sitio: la lista de páginas que deben conocer
+Sitemap: https://mafrox.com.pe/sitemap.xml
