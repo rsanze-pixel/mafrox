@@ -812,9 +812,12 @@
        'video' = video en bucle (VIDEO_CONTACTO, debajo)
        'globo' = globo del Perú con ciudades (todo lo que sigue)
      Para volver al globo, cambia 'video' por 'globo'. */
-  var VENTANA_CONTACTO = 'logo';
-  var VIDEO_CONTACTO  = 'images/importados-intro.mp4';          // mismo video de la entrada de Importados
-  var POSTER_CONTACTO = 'images/importados-intro-poster.jpg';   // foto mientras carga
+  var VENTANA_CONTACTO = 'video';
+  var VIDEO_CONTACTO  = 'images/contacto-torito.mp4';           // torito en bucle (9 s, sin audio, vertical)
+  var POSTER_CONTACTO = 'images/contacto-torito-poster.jpg';    // foto mientras carga
+  /* Para volver al logo con el video del camión: VENTANA_CONTACTO = 'logo',
+     VIDEO_CONTACTO = 'images/importados-intro.mp4' y
+     POSTER_CONTACTO = 'images/importados-intro-poster.jpg'. */
 
   /* ================================================================
      LOGO CON VIDEO · ventana derecha de "Contáctanos" (modo 'logo')
