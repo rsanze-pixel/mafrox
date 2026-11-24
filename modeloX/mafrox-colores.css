@@ -1,0 +1,113 @@
+/* ==================================================================
+   MAFROX — PALETA DE COLORES Y TAMAÑOS DE LETRA
+   (un solo archivo para toda la web)
+   ==================================================================
+   Lo usan:  index.html · linea-res.html · linea-porcino.html ·
+             productos-importados.html
+
+   ═══ CÓMO CAMBIAR LA PALETA ═══
+   1. Cambia el código de color (#xxxxxx) de cada línea.
+   2. Cambia TAMBIÉN su versión "-rgb" de la línea de abajo, con los
+      mismos tres números del color (rojo, verde, azul).
+      Ejemplo:  #1f5c37  →  31,92,55
+      (cualquier conversor "hex to rgb" de Google te da los números).
+      La versión -rgb sirve para los colores con transparencia
+      (velos, sombras, barras con vidrio).
+   3. Guarda y sube SOLO este archivo. En los HTML sube el número de
+      versión del enlace (mafrox-colores.css?v=…) para que el
+      navegador baje el archivo nuevo, y recarga con Ctrl+F5.
+
+   El detector de fondo claro/oscuro (logo, cursor y menú lateral)
+   se adapta solo a los colores nuevos: no hay que tocarlo.
+
+   ═══ LO QUE NO CAMBIA CON ESTE ARCHIVO ═══
+   · Fotos y videos que ya vienen con color (p. ej. menu-video.mp4,
+     que es tinta verde): esos hay que volver a generarlos.
+   · Banderas de países e idiomas, y el verde de WhatsApp del botón
+     redondo (se deja para que se reconozca la marca WhatsApp).
+   · Los degradados de respaldo de las tarjetas de «Nuestras líneas»
+     (solo se ven si falta la foto).
+   ================================================================== */
+:root{
+  /* ── COLORES PRINCIPALES ── */
+  --verde-oscuro:#0f2417;        /* Fondo de secciones oscuras, menú, pie        */
+  --verde-oscuro-rgb:15,36,23;
+  --verde:#1f5c37;               /* Verde principal: títulos, botones, cursor     */
+  --verde-rgb:31,92,55;
+  --lima:#8dc63f;                /* Acento: números, detalles, botón magnético    */
+  --lima-rgb:141,198,63;
+  --crema:#f7f5ee;               /* Fondo de secciones claras                     */
+  --crema-rgb:247,245,238;
+
+  /* ── TEXTOS ── */
+  --texto:#14210f;               /* Texto normal sobre fondo claro                */
+  --texto-suave:#4a5a4c;         /* Párrafos secundarios sobre claro              */
+  --texto-suave-oscuro:#a9bdac;  /* Párrafos secundarios sobre oscuro             */
+  --crema-calida:#fbf9dc;        /* Texto claro sobre fondo oscuro (pie, títulos) */
+  --crema-calida-rgb:251,249,220;
+  --gris:#8a9a8c;                /* Textos de apoyo                               */
+
+  /* ── SUPERFICIES Y LÍNEAS ── */
+  --gris-campo:#eeece3;          /* Campos del formulario                         */
+  --linea-clara:#e2dece;         /* Líneas divisorias sobre claro                 */
+  --whats-popup:#14331f;         /* Fondo del menú de WhatsApp                    */
+
+  /* ── VELOS Y SOMBRAS (casi negros, con un toque del verde oscuro) ── */
+  --sombra-rgb:6,12,8;           /* Velos sobre fotos (ruleta, portadas)          */
+  --sombra-verde-rgb:10,24,15;   /* Sombras de tarjetas y fondos de ventanas      */
+
+  /* ── MARCA ── */
+  --isotipo:#0E8847;             /* Verde del isotipo (solo referencia)           */
+}
+
+/* ==================================================================
+   TAMAÑOS DE LETRA — los 4 tamaños de toda la web (4 páginas)
+   ==================================================================
+   Cada tamaño se escribe  clamp(CELULAR, ESCALA, ESCRITORIO):
+     · el PRIMER número es el tamaño en celular (el mínimo)
+     · el ÚLTIMO número es el tamaño en escritorio (el máximo)
+     · el del medio (vw) hace que crezca de a pocos entre uno y otro.
+   Para cambiar un tamaño, cambia solo el primer o el último número.
+
+   QUÉ USA CADA UNO
+   --t-frase   Frases grandes: preámbulos («Nuestros canales»…),
+               «Conoce nuestra línea…», cierres, títulos de página
+               («Línea Res»…) y los 4 bloques de Importados.
+   --t-titulo  Títulos de sección: «¿Quiénes somos?», «Tres líneas…»,
+               «Capacidad para…», ficha del corte, receta…
+   --t-sub     Subtítulos de tarjeta: vitrina, canales, Responsabilidad
+               social, 3 razones, plato de cada método…
+   --t-parr    Párrafos y descripciones.
+   NO usan estos tamaños: cifras, menú, pie, etiquetas pequeñas y botones.
+   ================================================================== */
+:root{
+  --t-frase:  clamp(40px, 5.2vw, 70px);   /* celular 40 · escritorio 70 */
+  --t-titulo: clamp(34px, 4.4vw, 60px);   /* celular 34 · escritorio 60 */
+  --t-sub:    clamp(22px, 2.2vw, 30px);   /* celular 22 · escritorio 30 */
+  --t-parr:   clamp(16px, 1.32vw, 18px);  /* celular 16 · escritorio 18 */
+}
+
+/* ============================================================
+   PÁRRAFOS JUSTIFICADOS (las 4 páginas)
+   Todos los párrafos llenan su recuadro de borde a borde
+   (text-align:justify). hyphens:auto corta palabras largas con guion
+   para que no queden espacios grandes entre palabras.
+   text-align-last = cómo queda la ÚLTIMA línea de cada párrafo:
+     · en los textos centrados, al centro
+     · en la descripción de clientes de la ruleta (escritorio), a la derecha
+   Para agregar otro párrafo a la lista, suma su clase entre los paréntesis.
+   ============================================================ */
+html body :is(.nota, .vt-desc, .h8-paso > span, .h8-paso .leer-caja > span, .h8-extra p, .certif__bajada, .panel__rotulo,
+  .c3-desc, .rueda-desc p, .gente__intro p, .mfx-success__texto,
+  .mapa-sec__bajada, .razon p, .cierre-linea p, .apple__sub, .imp-intro p, .bloque__corto,
+  .fimp__texto, .ficha-corte__nombre p, .ficha-corte__usos p, .coccion__txt p, .receta__prep){
+  text-align:justify;hyphens:auto;-webkit-hyphens:auto;
+}
+html body :is(.cierre-linea p, .apple__sub, .mfx-success__texto){text-align-last:center;}
+@media(min-width:761px){ html body .rueda-desc p{text-align-last:right;} }
+
+/* Enlace discreto del pie a «Preguntas frecuentes»: mismo tono apagado que los
+   datos legales, un poco más pequeño y sin subrayado. Visible pero sin llamar
+   la atención (un enlace invisible lo castiga Google). */
+.pie-web__faq{color:inherit;font-size:11.5px;text-decoration:none;opacity:.85;}
+.pie-web__faq:hover{text-decoration:underline;}

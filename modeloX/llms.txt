@@ -1,0 +1,17 @@
+# MAFROX
+
+> MAFROX (Matadero Frigorífico Industrial Oxapampa S.A., RUC 20486024284) es una empresa peruana dedicada al beneficio de ganado, al procesamiento de carne nacional y a la comercialización y distribución de productos cárnicos importados. Tiene camal, centro de producción cárnica y frigorífico en Oxapampa (Pasco) y una sede en Lima.
+
+- Productos: carne de res criada a pasto en Oxapampa, cortes de cerdo y productos importados (res, porcino, pollo, gallina y menudencias) de Uruguay, Argentina, Brasil, Chile y Estados Unidos.
+- Clientes: supermercados y tiendas, concesionarios de alimentación (incluidas las cocinas de grandes mineras), plantas industriales y Horeca.
+- Calidad: autorizaciones sanitarias SENASA, sistema HACCP y gestión de la calidad basada en ISO 9001.
+- Capacidad: 1,000 toneladas de capacidad de producción; 180 ganaderos homologados; flota frigorífica propia; despacho refrigerado a Lima y provincias.
+- Dirección: Carretera a Pozuzo Km 5 (Bajo Santa Clara), Oxapampa, Pasco, Perú.
+
+## Páginas
+
+- [Inicio](https://mafrox.com.pe/): quiénes somos, líneas, canales, certificaciones, capacidad y clientes.
+- [Línea Res](https://mafrox.com.pe/linea-res.html): mapa de cortes de res, usos y recetas.
+- [Línea Porcino](https://mafrox.com.pe/linea-porcino.html): mapa de cortes de cerdo, usos y recetas.
+- [Productos importados](https://mafrox.com.pe/productos-importados.html): res, porcino, pollo, gallina y menudencias importados.
+- [Preguntas frecuentes](https://mafrox.com.pe/preguntas-frecuentes.html): respuestas directas sobre productos, clientes, calidad y cotización.

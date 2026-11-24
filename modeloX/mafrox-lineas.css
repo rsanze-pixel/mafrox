@@ -1,0 +1,916 @@
+/* ==================================================================
+   MAFROX — ESTILOS DE LAS PÁGINAS DE LÍNEAS
+     linea-res.html · linea-porcino.html · productos-importados.html
+
+   Los COLORES no están aquí: están en mafrox-colores.css
+   (el mismo archivo que usa el inicio).
+
+   La primera parte de este archivo es COPIA de los estilos globales
+   del inicio (barra superior, menú, cursor, formulario, WhatsApp y
+   pie de página), para que estas páginas se vean idénticas.
+   Si cambias algo global en index.html, cámbialo también aquí.
+   La segunda parte (busca "PIEZAS PROPIAS") es nueva.
+   ================================================================== */
+:root{
+  /* ==========================================================
+     CONFIGURACIÓN RÁPIDA — CAMBIA TODO DESDE AQUÍ
+     ========================================================== */
+  /* COLORES: ya no van aquí. Están todos en el archivo
+     mafrox-colores.css (compartido por todas las páginas).
+     Para cambiar la paleta, edita ese archivo. */
+
+
+  --espacio-seccion: 92px; /* Espacio arriba y abajo de cada sección */
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{overflow-x:hidden;}
+body{font-family:var(--fuente-texto);background:var(--crema);color:var(--texto);}
+h1,h2,h3{font-family:var(--fuente-titulos);text-transform:uppercase;line-height:.92;}
+img{display:block;max-width:100%;}
+/* Los botones heredan la letra de la web (sin esto el navegador les pone Arial) */
+button{font-family:inherit;}
+
+.progreso{position:fixed;top:0;left:0;height:3px;background:var(--lima);width:0%;z-index:200;}
+
+/* ===== MENÚ GLOBAL ===== */
+.barra-sup{position:fixed;top:0;left:0;width:100%;display:flex;justify-content:space-between;align-items:center;padding:26px 40px;z-index:190;pointer-events:none;}
+/* Listón degradado detrás del logo y el botón de menú: así siempre se
+   leen bien sin importar qué imagen o texto haya de fondo al hacer scroll. */
+.barra-sup::before{content:"";position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,rgba(0,0,0,.38) 0%,rgba(0,0,0,.14) 55%,rgba(0,0,0,0) 100%);pointer-events:none;z-index:-1;}
+body.menu-abierto .barra-sup::before{opacity:0;}
+@media(max-width:640px){.barra-sup::before{height:92px;}}
+/* CELULAR: la barra superior lleva fondo propio (claro u oscuro según la
+   sección) para que los títulos nunca pasen por debajo del logo. */
+@media(max-width:820px){
+  .barra-sup{background:rgba(var(--crema-rgb),.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    transition:background-color .35s ease;}
+  body.fondo-oscuro .barra-sup{background:rgba(var(--verde-oscuro-rgb),.94);}
+  .barra-sup::before{display:none;}
+  body.menu-abierto .barra-sup{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;}
+  /* Importados: durante la entrada con video la barra no lleva fondo */
+  body.en-apple:not(.menu-abierto) .barra-sup{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;}
+}
+.barra-sup .marca{pointer-events:auto;}
+/* LOGO que cambia de color según el fondo:
+   se apilan los dos PNG (blanco y negro) y se muestra el que contrasta. */
+.barra-sup .marca .logo{position:relative;display:block;height:48px;width:auto;}
+.barra-sup .marca .logo img{height:48px;width:auto;display:block;transition:opacity .45s ease;}
+.barra-sup .marca .logo img.logo-oscuro{position:absolute;top:0;left:0;}   /* logo para fondo oscuro (blanco) */
+.barra-sup .marca .logo .logo-oscuro{opacity:1;}   /* por defecto asumimos fondo oscuro (hero) */
+.barra-sup .marca .logo .logo-claro{opacity:0;}
+/* Cuando el fondo bajo la barra es CLARO, mostramos el logo negro */
+body.fondo-oscuro .barra-sup .marca .logo .logo-oscuro{opacity:1;}
+body.fondo-oscuro .barra-sup .marca .logo .logo-claro{opacity:0;}
+body:not(.fondo-oscuro) .barra-sup .marca .logo .logo-oscuro{opacity:0;}
+body:not(.fondo-oscuro) .barra-sup .marca .logo .logo-claro{opacity:1;}
+/* Con el menú abierto (fondo verde muy oscuro) forzamos el logo blanco */
+body.menu-abierto .barra-sup .marca .logo .logo-oscuro{opacity:1;}
+body.menu-abierto .barra-sup .marca .logo .logo-claro{opacity:0;}
+/* ---- BOTONES DE LA ESQUINA SUPERIOR DERECHA (Contacto + Menú) ----
+   Dos cápsulas gemelas con ícono. Al pasar el cursor se rellenan de
+   blanco, se estiran y muestran su texto.
+   TAMAÑO: cambia el "height:24px" de .btn-ico (y el 12px de los íconos). */
+.barra-der{display:flex;align-items:center;gap:8px;pointer-events:auto;}
+.btn-ico{-webkit-appearance:none;appearance:none;margin:0;position:relative;display:inline-flex;align-items:center;height:24px;padding:0 5px;border-radius:99px;border:1px solid rgba(255,255,255,.7);background:rgba(var(--verde-oscuro-rgb),.28);color:#fff;cursor:pointer;isolation:isolate;font-family:var(--fuente-texto);transition:border-color .45s cubic-bezier(.65,0,.35,1),color .45s cubic-bezier(.65,0,.35,1);}
+/* Relleno blanco que aparece desde el centro */
+.btn-ico::before{content:"";position:absolute;inset:-1px;background:#fff;border-radius:inherit;transform:scale(.4);opacity:0;transition:transform .5s cubic-bezier(.65,0,.35,1),opacity .3s ease;z-index:-1;}
+/* Zona de click invisible más grande que el botón (más fácil de tocar) */
+.btn-ico::after{content:"";position:absolute;inset:-9px -5px;}
+.btn-ico__txt{max-width:0;opacity:0;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;line-height:1;transition:max-width .5s cubic-bezier(.65,0,.35,1),opacity .3s ease,margin .5s cubic-bezier(.65,0,.35,1);}
+.btn-ico__ico{width:12px;height:12px;display:flex;align-items:center;justify-content:center;flex:none;}
+.btn-ico__ico svg{width:12px;height:12px;display:block;}
+.btn-ico__lineas{display:flex;flex-direction:column;align-items:flex-end;gap:3px;width:12px;}
+.btn-ico__lineas i{display:block;height:1.5px;background:currentColor;border-radius:1px;transition:width .45s cubic-bezier(.65,0,.35,1);}
+.btn-ico__lineas i:first-child{width:12px;}
+.btn-ico__lineas i:last-child{width:8px;}
+.btn-ico:hover,.btn-ico:focus-visible{border-color:#fff;color:var(--verde-oscuro);outline:none;}
+.btn-ico:hover::before,.btn-ico:focus-visible::before{transform:scale(1);opacity:1;}
+.btn-ico:hover .btn-ico__txt,.btn-ico:focus-visible .btn-ico__txt{max-width:90px;opacity:1;margin:0 7px 0 4px;transition-delay:0s,.12s,0s;}
+.btn-ico:hover .btn-ico__lineas i:last-child,.btn-ico:focus-visible .btn-ico__lineas i:last-child{width:12px;}
+@media(prefers-reduced-motion:reduce){.btn-ico,.btn-ico::before,.btn-ico__txt,.btn-ico__lineas i{transition:none!important;}}
+/* El menú cerrado queda además con visibility:hidden. Sin esto, al cargar la
+   página el VIDEO del menú se llegaba a pintar un instante por encima de todo
+   (algunos navegadores no recortan los videos con clip-path) → "pestañeo". */
+.menu{position:fixed;inset:0;background:var(--verde-oscuro);clip-path:inset(0 0 100% 0);visibility:hidden;transition:clip-path .8s cubic-bezier(.65,0,.35,1),visibility 0s linear .8s;z-index:195;overflow:hidden;}
+.menu.is-open{clip-path:inset(0 0 0% 0);visibility:visible;transition:clip-path .8s cubic-bezier(.65,0,.35,1),visibility 0s;}
+/* ---- VIDEO DE FONDO DEL MENÚ ---- */
+.menu .video-fondo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+/* Velo sobre el video del menú.
+   El video actual (toro en la pastura) ya viene oscuro, así que el velo
+   es un verde muy oscuro suave que lo integra con la marca.
+   Sube el .25 si quieres que el texto resalte más; bájalo para ver más el video. */
+.menu .video-velo{position:absolute;inset:0;background:rgba(var(--verde-oscuro-rgb),.25);z-index:1;}
+.menu__media{position:absolute;inset:0;overflow:hidden;}
+.menu__media video{width:100%;height:100%;object-fit:cover;}
+.menu__nav{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;color:#fff;text-align:center;width:100%;padding:0 24px;z-index:2;} /* Sin mix-blend-mode: con el video oscuro actual el texto va blanco puro (el modo 'difference' lo volvía rosado) */
+.menu__item{position:relative;display:inline-block;font-family:var(--fuente-menu);font-weight:600;font-size:clamp(24px,4.4vw,66px);line-height:1.02;letter-spacing:-.035em;text-decoration:none;color:inherit;opacity:0;transform:translate3d(0,38px,0);transition:opacity .45s cubic-bezier(.23,1,.32,1),filter .45s cubic-bezier(.23,1,.32,1),transform .6s cubic-bezier(.23,1,.32,1);will-change:opacity,filter,transform;backface-visibility:hidden;}
+.menu.is-open .menu__item{opacity:1;transform:translate3d(0,0,0);}
+.menu.is-open .menu__item:nth-child(1){transition-delay:.2s;}
+.menu.is-open .menu__item:nth-child(2){transition-delay:.26s;}
+.menu.is-open .menu__item:nth-child(3){transition-delay:.32s;}
+.menu.is-open .menu__item:nth-child(4){transition-delay:.38s;}
+.menu.is-open .menu__item:nth-child(5){transition-delay:.44s;}
+.menu.is-open .menu__item:nth-child(6){transition-delay:.50s;}
+.menu__nav.hover-activo .menu__item:not(.item-activo){opacity:.5;filter:blur(1.6px);}   /* desenfoque suave: el texto sigue casi visible */
+/* NÚMERO delante de cada opción del menú (1. 2. 3.) */
+.menu__item.actual{color:var(--lima);}   /* marca la página en la que estás */
+.menu__close{position:absolute;top:24px;right:40px;background:none;border:none;cursor:pointer;z-index:196;color:#fff;padding:10px;font-family:var(--fuente-menu);font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;transition:color .3s ease;}
+/* Redes sociales del menú — mismo alto que "Cerrar", esquina opuesta */
+.menu__social{position:absolute;top:26px;left:40px;display:flex;gap:18px;z-index:196;}
+.menu__social-link{color:rgba(255,255,255,.42);transition:color .3s ease,transform .25s ease;display:flex;}
+.menu__social-link:hover{transform:translateY(-2px);}
+.menu__social-link svg{width:20px;height:20px;display:block;}
+.menu__social-link.facebook:hover{color:#1877F2;}
+.menu__social-link.instagram:hover{color:#E1306C;}
+.menu__social-link.linkedin:hover{color:#0A66C2;}
+@media(max-width:640px){
+  .menu__social{top:18px;left:16px;gap:12px;}
+  .menu__social-link svg{width:16px;height:16px;}
+}
+.menu__close:hover{background:var(--lima);border-color:var(--lima);color:var(--verde-oscuro);transform:scale(1.04);}
+.menu__close .x{font-size:22px;line-height:1;font-weight:400;}
+@media(max-width:640px){.menu__close{top:16px;right:16px;padding:9px 16px 9px 13px;font-size:11px;} .menu__close .x{font-size:18px;}}
+.menu__pie{position:absolute;bottom:34px;left:0;width:100%;display:flex;justify-content:center;gap:26px;font-family:var(--fuente-menu);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);z-index:2;}
+
+/* ===== MENÚ LATERAL (izquierda, al centro, fijo en toda la web) =====
+   Número + raya + nombre, en la misma fuente sin serif de la web,
+   pequeña y discreta (solo acompaña). Solo la sección activa
+   muestra la raya y su nombre; al pasar el cursor se ve cada nombre.
+   Los nombres se editan en <nav class="indice"> (span class="txt"). */
+.indice{position:fixed;left:2.1vw;top:50%;transform:translateY(-50%);z-index:150;display:flex;flex-direction:column;gap:10px;list-style:none;
+  font-family:var(--fuente-texto);font-style:normal;font-weight:500;font-size:11px;letter-spacing:.01em;font-variant-numeric:tabular-nums;color:var(--verde-oscuro);transition:color .22s ease;}
+/* El cambio de color es RÁPIDO a propósito (.22s): en los bloques cuyo fondo
+   pasa de claro a oscuro con el scroll, una transición lenta dejaba medio
+   segundo con el menú del mismo tono que el fondo. */
+.indice.claro{color:var(--crema-calida);}        /* sobre secciones oscuras */
+.indice a{display:flex;align-items:center;height:15px;color:inherit;text-decoration:none;opacity:.32;transition:opacity .5s ease;}
+.indice a:hover{opacity:.75;}
+.indice .n{width:14px;}
+.indice .raya{width:0;height:1px;background:currentColor;margin:0;transition:width .5s ease,margin .5s ease;}
+.indice .txt{max-width:0;overflow:hidden;white-space:nowrap;font-size:11.5px;transition:max-width .7s ease;}
+.indice a.activo{opacity:1;}
+.indice a.activo .raya{width:20px;margin:0 12px 0 8px;}
+.indice a.activo .txt{max-width:220px;}
+.indice a:hover .raya{width:20px;margin:0 12px 0 8px;}
+.indice a:hover .txt{max-width:220px;}
+/* En pantallas medianas el contenido empieza más a la izquierda:
+   ahí el nombre solo aparece al pasar el cursor, para no taparlo. */
+@media(max-width:1399px){.indice a.activo:not(:hover) .txt{max-width:0;}}
+@media(max-width:900px){.indice{display:none;}}
+
+.container{max-width:1120px;margin:0 auto;padding:0 40px;}
+section{position:relative;}
+.oscura{background:var(--verde-oscuro);color:#fff;}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--verde);margin-bottom:16px;}
+.eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--lima);}
+.oscura .eyebrow{color:var(--lima);}
+.titulo{font-size:var(--t-titulo);}
+.nota{font-size:var(--t-parr);color:var(--texto-suave);margin-top:16px;max-width:520px;line-height:1.7;}
+.oscura .nota{color:var(--texto-suave-oscuro);}
+.frase{font-family:var(--fuente-titulos);text-transform:none;font-size:clamp(20px,2.4vw,30px);line-height:1.25;color:var(--verde);margin-top:22px;}
+.oscura .frase{color:var(--lima);}
+
+
+.rotador{display:inline-block;height:1.06em;overflow:hidden;vertical-align:bottom;}
+.rotador ul{list-style:none;}
+.rotador li{height:1.06em;color:var(--lima);}
+.magnet-zona{display:flex;justify-content:center;padding:44px 0 0;}
+.magnet{background:var(--lima);color:var(--verde-oscuro);border:none;border-radius:99px;padding:22px 48px;font-family:var(--fuente-texto);font-weight:700;font-size:15px;cursor:pointer;will-change:transform;}
+
+.cierre{min-height:52vh;padding:70px 0;display:flex;align-items:center;text-align:center;background:var(--verde);}
+.cierre h2{font-size:clamp(27px,5.12vw,70px);color:#fff;}   /* -20% */
+
+@media(max-width:820px){
+  .alt{grid-template-columns:1fr;gap:28px;padding:56px 0;}
+  .alt:nth-child(even) .alt-img{order:0;}
+  .container{padding:0 24px;}
+  .barra-sup{padding:18px 22px;}
+  .barra-sup .marca .logo,.barra-sup .marca .logo img{height:34px;}
+}
+
+
+/* ============================================================
+   CURSOR: un CÍRCULO SÓLIDO con una sutil estela.
+   Cambia de color según el fondo (verde en claro, blanco en oscuro)
+   y se vuelve lima al pasar por enlaces o al hacer clic.
+   PARA DESACTIVARLO: borra este bloque completo y su <script>.
+   ============================================================ */
+@media (hover:hover) and (pointer:fine){
+  body,a,button,.fila,.menu__item{cursor:none;}
+
+  /* ── CURSOR PRINCIPAL: círculo SÓLIDO ── */
+  .cursor-punto{
+    position:fixed;top:0;left:0;
+    width:14px;height:14px;border-radius:50%;       /* TAMAÑO del círculo */
+    background-color:var(--verde);                   /* COLOR sobre FONDO CLARO */
+    pointer-events:none;z-index:10100;
+    transform:translate(-50%,-50%);will-change:transform;
+    transition:background-color .30s ease, width .22s cubic-bezier(.23,1,.32,1),
+               height .22s cubic-bezier(.23,1,.32,1), opacity .3s ease;
+  }
+  /* El anillo ya no se usa como hueco; lo dejamos oculto para no romper el JS */
+  .cursor-anillo{display:none;}
+
+  /* ── SOBRE FONDO OSCURO: el círculo pasa a blanco ── */
+  body.fondo-oscuro .cursor-punto{background-color:#fff;}
+
+  /* ── AL HACER CLIC: se encoge y se pinta de lima ── */
+  body.clic .cursor-punto{background-color:var(--lima);width:12px;height:12px;}
+
+  /* ── SOBRE ENLACES / BOTONES: solo cambia de color, mantiene su tamaño ── */
+  body.sobre-link .cursor-punto{background-color:var(--lima);}
+
+  /* ── ESTELA: destello suave — círculos sólidos que siguen al principal ── */
+  .cursor-estela{
+    position:fixed;top:0;left:0;
+    width:14px;height:14px;border-radius:50%;
+    background-color:var(--verde);
+    pointer-events:none;z-index:10099;
+    transform:translate(-50%,-50%);will-change:transform;
+    transition:background-color .35s ease;
+    filter:blur(1px);
+  }
+  body.fondo-oscuro .cursor-estela{background-color:#fff;}
+  .cursor-estela.e1{opacity:.28;}
+  .cursor-estela.e2{opacity:.16;width:12px;height:12px;}
+  .cursor-estela.e3{opacity:.08;width:9px;height:9px;}
+
+  /* Con el menú abierto (fondo verde oscuro) el cursor se ve en lima */
+  body.menu-abierto .cursor-punto,body.menu-abierto .cursor-estela{background-color:var(--lima);}
+  /* El modal de contacto es un overlay fijo con fondo CLARO ("Claro
+     editorial"): no lo ve el detector de secciones por scroll, así que
+     forzamos aquí el cursor oscuro para que siga siendo visible. */
+  body.modal-contacto-abierto .cursor-punto,body.modal-contacto-abierto .cursor-estela{background-color:var(--verde);}
+}
+.siguiente{display:inline-block;margin-top:26px;color:#fff;text-decoration:none;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid var(--lima);padding-bottom:5px;transition:opacity .3s}
+.siguiente:hover{opacity:.7}
+
+/* ============================================================
+   EXTRAS MAFROX · Modal de contacto + botón WhatsApp
+   ============================================================ */
+/* Botón/enlaces del pie del menú (idioma y contacto) */
+.menu__pie .abrir-contacto{transition:color .25s ease;}
+.menu__pie .abrir-contacto:hover{color:var(--lima);}
+
+
+/* Modal de contacto — "Claro editorial": fondo claro, campos sin marco
+   en gris suave, y el verde oscuro como único acento (botón Enviar).
+   A pantalla completa, sin marcos, sin scroll. */
+/* ===== FORMULARIO DE CONTACTO (G8) — dos ventanas =====
+   Formulario a la izquierda y, a su costado, la foto Mafrox-contacto.jpg en un
+   recuadro del mismo tamaño. Fondo oscuro translúcido alrededor para
+   que respire: no ocupa toda la pantalla.
+   TAMAÑO de cada ventana: cambia --ventana-ancho. */
+.mfx-modal{position:fixed;inset:0;z-index:10050;display:none;--ventana-ancho:min(440px,40vw);}
+.mfx-modal.abierto{display:flex;justify-content:center;align-items:center;padding:6vh 4vw;}
+/* Fondo sin desenfoque: el blur hacía que el cursor se sintiera lento */
+.mfx-modal__fondo{position:absolute;inset:0;background:rgba(var(--sombra-verde-rgb),.80);animation:mfxFade .4s ease;}
+.mfx-modal__ventanas{position:relative;display:flex;align-items:stretch;gap:18px;max-height:100%;}
+.mfx-modal__caja{position:relative;width:var(--ventana-ancho);background:var(--crema);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 36px 36px;animation:mfxUp .45s cubic-bezier(.23,1,.32,1);overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.35);}
+/* Ventana derecha: foto images/Mafrox-contacto.jpg (se recorta sola para
+   llenar el recuadro; ajusta background-position si quieres encuadrar
+   otra parte de la foto, por ejemplo "center 30%"). */
+.mfx-modal__foto{position:relative;width:var(--ventana-ancho);border-radius:20px;overflow:hidden;background:var(--verde-oscuro);animation:mfxUp .45s cubic-bezier(.23,1,.32,1) .08s both;box-shadow:0 30px 70px rgba(0,0,0,.35);}
+.mfx-modal__foto video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+/* Ventana "logo con video" de Contáctanos: el dibujo lo hace el script en el lienzo */
+.mfx-logo{background:var(--verde-oscuro);}
+.mfx-logo canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.mfx-logo video{opacity:0;pointer-events:none;}
+/* ── GLOBO DEL PERÚ (ventana derecha de Contáctanos) ──
+   El dibujo y las ciudades están en mafrox-extras.js → "GLOBO DEL PERÚ". */
+.mfx-globo{background:radial-gradient(120% 80% at 50% 0%,#12301f 0%,#08180f 55%,#050f09 100%);}
+.mfx-globo .g-lienzo{position:absolute;inset:0;width:100%;height:100%;display:block;}
+/* Frase arriba a la izquierda */
+.mfx-globo__lema{position:absolute;left:26px;top:24px;margin:0;z-index:3;font-family:var(--fuente-texto);font-size:11px;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--lima);}
+/* Pin tipo "gota": la punta marca la ciudad */
+.g-pin{position:absolute;left:0;top:0;width:15px;height:21px;z-index:2;cursor:pointer;
+  transform:translate(-50%,-100%);transform-origin:50% 100%;opacity:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.g-pin svg{display:block;width:100%;height:100%;overflow:visible;}
+.g-pin svg path{fill:var(--lima);stroke:#06120c;stroke-width:1.2;}
+.g-pin svg circle{fill:#06120c;}
+/* Oxapampa (origen): punto crema que late, distinto de las ciudades */
+/* Va DEBAJO de los pines (z-index 1) para no tapar a Huancayo, que está muy cerca */
+.g-pin--origen{width:11px;height:11px;transform:translate(-50%,-50%);transform-origin:50% 50%;z-index:1;}
+.g-pin--origen i{position:absolute;inset:0;border-radius:50%;background:#fbf9dc;box-shadow:0 0 0 3px var(--lima),0 0 16px 4px rgba(141,198,63,.8);}
+.g-pin--origen::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--lima);animation:gLate 1.8s ease-out infinite;}
+@keyframes gLate{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.2);opacity:0}}
+/* Nombre de la ciudad: solo aparece al pasar el cursor por su pin */
+.g-nombre{position:absolute;left:50%;bottom:calc(100% + 8px);transform:translate(-50%,6px);white-space:nowrap;padding:5px 10px;border-radius:99px;background:#fbf9dc;color:#0f2417;
+  font-family:var(--fuente-texto);font-size:12px;font-weight:600;letter-spacing:-.01em;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .25s cubic-bezier(.23,1,.32,1);}
+.g-pin:hover{z-index:6;transform:translate(-50%,-100%) scale(1.3);}
+.g-pin--origen:hover{transform:translate(-50%,-50%) scale(1.2);}
+.g-pin:hover .g-nombre{opacity:1;transform:translate(-50%,0);}
+@media(prefers-reduced-motion:reduce){.g-pin--origen::before{animation:none;}}
+.mfx-modal__x{top:16px;right:18px;font-size:20px;}
+@media(max-width:820px){
+  .mfx-modal{--ventana-ancho:min(460px,92vw);}
+  .mfx-modal__foto{display:none;}
+}
+.mfx-form{width:100%;max-width:460px;max-height:100%;}
+.mfx-modal__x{position:absolute;top:24px;right:34px;background:transparent;color:var(--verde-oscuro);border:none;font-size:26px;cursor:pointer;transition:color .25s ease,transform .25s ease;line-height:1;z-index:2;}
+.mfx-modal__x:hover{color:var(--verde);transform:scale(1.1);}
+.mfx-modal__titulo{font-family:var(--fuente-titulos);text-transform:uppercase;color:var(--verde-oscuro);font-size:clamp(24px,3.2vw,32px);line-height:1;margin:0 0 6px;text-align:center;}
+.mfx-modal__sub{color:rgba(var(--verde-oscuro-rgb),.55);font-size:13.5px;line-height:1.4;margin:0 0 22px;text-align:center;}
+/* Grilla de 2 columnas: aprovecha mejor el ancho; los campos anchos
+   (correo, comentarios) llevan la clase .full para ocupar ambas. */
+.mfx-form .grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;}
+.mfx-campo{margin-bottom:13px;display:flex;flex-direction:column;}
+.mfx-campo.full{grid-column:1/-1;}
+.mfx-campo label{font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:rgba(var(--verde-oscuro-rgb),.42);font-weight:600;margin-bottom:5px;}
+.mfx-campo input,.mfx-campo textarea{font-family:var(--fuente-menu);font-size:14px;color:var(--verde-oscuro);background:var(--gris-campo);border:none;border-radius:9px;padding:11px 13px;width:100%;transition:background-color .25s ease;resize:none;}
+.mfx-campo textarea{min-height:44px;}
+.mfx-campo input::placeholder,.mfx-campo textarea::placeholder{color:rgba(var(--verde-oscuro-rgb),.34);}
+.mfx-campo input:focus,.mfx-campo textarea:focus{outline:none;background:#e6e3d7;}
+.mfx-campo.con-error input,.mfx-campo.con-error textarea{box-shadow:inset 0 0 0 1.5px #c0392b;}
+.mfx-error{color:#c0392b;font-size:11px;margin-top:3px;min-height:13px;}
+.mfx-enviar{width:100%;margin-top:6px;background:var(--verde-oscuro);color:#fff;border:none;border-radius:99px;padding:13px;font-family:var(--fuente-menu);font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:transform .2s ease,opacity .2s ease;}
+.mfx-enviar:hover{transform:translateY(-2px);opacity:.88;}
+.mfx-enviar:disabled{opacity:.55;cursor:default;transform:none;}
+@keyframes mfxFade{from{opacity:0}to{opacity:1}}
+@keyframes mfxUp{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+
+/* Pantalla de confirmación tras enviar: foto + logo + mensaje */
+.mfx-success{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;width:100%;height:100%;position:absolute;inset:0;background:var(--crema);}
+.mfx-modal.enviado .mfx-form{display:none;}
+.mfx-modal.enviado .mfx-success{display:flex;}
+.mfx-success__foto{width:min(360px,70vw);height:min(220px,32vh);border-radius:16px;background-size:cover;background-position:center;margin-bottom:28px;box-shadow:0 20px 50px rgba(0,0,0,.2);}
+.mfx-success__logo{height:34px;margin-bottom:26px;}
+.mfx-success__logo img{height:100%;width:auto;}
+.mfx-success__titulo{font-family:var(--fuente-titulos);text-transform:uppercase;color:var(--verde-oscuro);font-size:clamp(24px,3.4vw,32px);line-height:1.1;margin:0 0 12px;}
+/* Pantalla de gracias: ocupa el mismo alto que el formulario */
+.mfx-modal.enviado .mfx-modal__caja{min-height:min(560px,72vh);}
+.mfx-success{padding:40px 34px;}
+.mfx-success__titulo{margin:0 0 10px;font-size:clamp(20px,2vw,28px);font-weight:600;letter-spacing:-.03em;line-height:1.15;color:var(--verde-oscuro);}
+.mfx-success__texto{font-size:14.5px;color:rgba(var(--verde-oscuro-rgb),.65);width:26em;max-width:84vw;line-height:1.5;}
+
+/* Botón flotante de WhatsApp con el ícono de Mafrox */
+.mfx-whats-wrap{position:fixed;right:22px;bottom:22px;z-index:10040;}
+.mfx-whats{position:relative;width:54px;height:54px;border-radius:50%;background:#25D366;border:none;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(37,211,102,.45);transition:transform .25s ease,box-shadow .25s ease;}
+.mfx-whats:hover{transform:scale(1.08);box-shadow:0 14px 32px rgba(37,211,102,.6);}
+.mfx-whats img{width:34px;height:34px;object-fit:contain;display:block;pointer-events:none;}
+/* Tooltip "Chatea con Mafrox" al pasar el cursor — se oculta cuando el menú de contacto está abierto */
+.mfx-whats__tooltip{position:absolute;right:calc(100% + 14px);top:50%;transform:translateY(-50%) translateX(6px);background:var(--verde-oscuro);color:#fff;font-family:var(--fuente-menu);font-size:12.5px;font-weight:600;letter-spacing:.02em;white-space:nowrap;padding:9px 16px;border-radius:99px;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;box-shadow:0 8px 20px rgba(0,0,0,.25);}
+.mfx-whats__tooltip::after{content:"";position:absolute;left:100%;top:50%;transform:translateY(-50%);border:6px solid transparent;border-left-color:var(--verde-oscuro);}
+.mfx-whats:hover .mfx-whats__tooltip{opacity:1;transform:translateY(-50%) translateX(0);}
+.mfx-whats-wrap.abierto .mfx-whats__tooltip{opacity:0!important;}
+@media(max-width:640px){.mfx-whats__tooltip{display:none;}}
+.mfx-whats::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #25D366;animation:mfxPulse 2.2s ease-out infinite;pointer-events:none;}
+@keyframes mfxPulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.7);opacity:0}}
+
+/* Menú de contacto por WhatsApp — sale del botón con un efecto "genio"
+   (como las ventanas del Dock de Mac) en un solo movimiento fluido, y se
+   repliega al quitar el cursor. Fondo de vidrio pavonado verde claro;
+   las opciones son solo texto y cambian de color al pasar el cursor.
+   PARA CAMBIAR NÚMEROS O CARGOS: edita AGENTES_WHATS en mafrox-extras.js */
+.mfx-whats-menu{position:absolute;right:0;bottom:calc(100% + 12px);width:208px;padding:8px 4px;
+  /* Verde WhatsApp con las letras en blanco (buen contraste) */
+  background:rgba(18,140,126,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-radius:15px;box-shadow:0 16px 36px rgba(4,60,52,.32);
+  transform-origin:calc(100% - 27px) calc(100% + 39px);   /* nace del centro del botón */
+  opacity:0;visibility:hidden;pointer-events:none;
+  transform:translate(4px,16px) scale(.2,.08) skewX(-8deg);
+  /* Cierre: rápido y hacia el botón */
+  transition:transform .3s cubic-bezier(.4,0,.6,1),opacity .22s ease .06s,visibility 0s linear .3s;}
+/* Puente invisible entre el menú y el botón: evita que se cierre al bajar el cursor */
+.mfx-whats-menu::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;}
+/* Apertura: UN solo movimiento continuo (sin pasos intermedios) */
+.mfx-whats-wrap.abierto .mfx-whats-menu{opacity:1;visibility:visible;pointer-events:auto;transform:none;
+  transition:transform .55s cubic-bezier(.16,1,.3,1),opacity .25s ease,visibility 0s;}
+.mfx-whats-op{display:flex;align-items:center;justify-content:space-between;gap:11px;padding:10px 13px;background:none;color:#fff;text-decoration:none;font-family:var(--fuente-menu);font-size:13.5px;font-weight:600;letter-spacing:-.005em;
+  opacity:0;transition:color .2s ease,opacity .25s ease;}
+.mfx-whats-wrap.abierto .mfx-whats-op{opacity:1;transition:color .2s ease,opacity .35s ease .12s;}
+/* Al pasar el cursor: SIN recuadro, solo cambia el color del texto */
+.mfx-whats-op:hover,.mfx-whats-op:focus-visible{background:rgba(255,255,255,.14);border-radius:9px;color:#eaffd8;outline:none;}
+.mfx-whats-op__flecha{width:14px;height:14px;flex:none;color:rgba(255,255,255,.55);transition:color .2s ease,transform .25s cubic-bezier(.23,1,.32,1);}
+.mfx-whats-op:hover .mfx-whats-op__flecha,.mfx-whats-op:focus-visible .mfx-whats-op__flecha{color:#eaffd8;transform:translate(2px,-2px);}
+/* Con el menú abierto, el pulso del botón se detiene para no distraer */
+.mfx-whats-wrap.abierto .mfx-whats::after{animation:none;opacity:0;}
+/* Ícono de Mafrox: al pasar el cursor o con el menú abierto cambia a
+   verde oscuro y crece ligeramente */
+.mfx-whats img{transition:transform .35s cubic-bezier(.34,1.56,.64,1),filter .3s ease;}
+.mfx-whats:hover img,.mfx-whats-wrap.abierto .mfx-whats img{transform:scale(1.14);filter:brightness(0) saturate(100%) invert(10%) sepia(30%) saturate(1100%) hue-rotate(95deg) brightness(.95);}
+@media(prefers-reduced-motion:reduce){.mfx-whats-menu,.mfx-whats-op{transition:opacity .15s ease,visibility 0s!important;transform:none!important;}}
+@media(max-width:640px){
+  .mfx-whats-wrap{right:16px;bottom:16px;}
+  .mfx-whats{width:47px;height:47px;}
+  .mfx-whats img{width:29px;height:29px;}
+  .mfx-whats-menu{width:190px;transform-origin:calc(100% - 23px) calc(100% + 35px);}
+}
+
+/* ============================================================
+   TIPOGRAFÍA · INTER TIGHT EN TODA LA WEB
+   (la misma del efecto "rueda de marcas"; detalles en serif
+   cursiva Georgia para el menú lateral).
+   Antes: Anton (títulos en mayúsculas) + Work Sans + TWK Everett.
+   Para cambiar de fuente: edita las 3 variables de abajo.
+   ============================================================ */
+:root{
+  --fuente-titulos: "Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --fuente-texto:   "Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --fuente-menu:    "Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --fuente-serif:   Georgia,"Times New Roman",serif;
+}
+body{-webkit-font-smoothing:antialiased;}
+/* Títulos: ya no van en mayúsculas; peso semibold y letras apretadas */
+h1,h2,h3,.px-txt b,.horiz-item b,.marquee-track b,.cinetico,.mfx-modal__titulo,.mfx-success__titulo{
+  text-transform:none;font-weight:600;letter-spacing:-.04em;line-height:1.02;}
+.frase{font-weight:600;letter-spacing:-.03em;}
+.cifra b,.alt .n,.horiz-item .paso{font-weight:600;letter-spacing:-.05em;}
+/* overflow-x:clip en vez de hidden: "hidden" convierte <body> en contenedor
+   de scroll y rompe position:sticky (lo usa la rueda de clientes). */
+html,body{overflow-x:clip;}
+
+/* ===== MENÚ (pantalla completa) — versión compacta a la derecha =====
+   · Opciones 40% más pequeñas y alineadas a la derecha.
+   · El color del texto se adapta solo al video de fondo: si detrás hay
+     una zona clara, el texto pasa a verde oscuro (clase .sobre-claro,
+     la pone mafrox-extras.js → "CONTRASTE DEL MENÚ").
+   · Abajo al centro: redes sociales, "Oxapampa · Perú" e idioma ES / EN. */
+.menu__nav{left:auto;right:8vw;transform:translateY(-50%);align-items:flex-end;text-align:right;width:auto;padding:0;gap:6px;}
+.menu__item{font-size:clamp(17px,3.36vw,53px);transition:opacity .45s cubic-bezier(.23,1,.32,1),filter .45s cubic-bezier(.23,1,.32,1),transform .6s cubic-bezier(.23,1,.32,1),color .5s ease;}
+.menu__item.sobre-claro{color:var(--verde-oscuro);}
+.menu__item.actual.sobre-claro{color:var(--verde);}
+.menu__close{transition:color .5s ease;}
+.menu__close.sobre-claro{color:var(--verde-oscuro);}
+.menu__pie{flex-direction:column;align-items:center;gap:14px;bottom:30px;text-align:center;transition:color .5s ease;}
+.menu__pie .menu__social{position:static;display:flex;justify-content:center;gap:22px;}
+.menu__pie .menu__social-link{color:rgba(255,255,255,.6);}
+.menu__pie .menu__social-link svg{width:28px;height:28px;}      /* 20px → 24px (+20%) → 28px (+15%) */
+.menu__pie.sobre-claro{color:rgba(var(--verde-oscuro-rgb),.78);}
+.menu__pie.sobre-claro .menu__social-link{color:rgba(var(--verde-oscuro-rgb),.6);}
+/* Idioma: letras simples ES / EN (la activa en blanco pleno) */
+.menu__pie .lang-letras{display:inline-flex;align-items:center;gap:8px;}
+.menu__pie .lang-titulo{margin-right:6px;opacity:.6;}
+.menu__pie .lang-op{display:inline-flex;align-items:center;gap:6px;}
+.menu__pie .bandera{width:16px;height:auto;display:block;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.12);}
+.menu__pie .lang-op{background:none;border:none;padding:4px 2px;margin:0;font:inherit;letter-spacing:inherit;color:inherit;opacity:.45;cursor:pointer;transition:opacity .25s ease,color .25s ease;}
+.menu__pie .lang-op:hover{opacity:.85;}
+.menu__pie .lang-op.activo{opacity:1;}
+.menu__pie .lang-sep{opacity:.35;}
+@media(max-width:640px){
+  .menu__nav{right:24px;}
+  .menu__item{font-size:clamp(16px,4.9vw,26px);}   /* 6 opciones: entran sin tocar los bordes */
+  .menu__pie .menu__social-link svg{width:23px;height:23px;}
+}
+
+/* ============================================================
+   AJUSTES · RONDA DE CAMBIOS (octubre 2026)
+   ============================================================ */
+
+/* G4 · Botones Contacto y Menú: 10% más grandes */
+.btn-ico{height:29px;padding:0 7px;}
+.btn-ico__txt{font-size:12px;}
+.btn-ico__ico,.btn-ico__ico svg{width:14.5px;height:14.5px;}
+.btn-ico__lineas{width:14.5px;}
+.btn-ico__lineas i:first-child{width:14.5px;}
+.btn-ico__lineas i:last-child{width:10px;}
+.btn-ico:hover .btn-ico__lineas i:last-child,.btn-ico:focus-visible .btn-ico__lineas i:last-child{width:14.5px;}
+/* Etiqueta fija debajo de cada botón ("Menú" / "Contacto"): se ve siempre y
+   desaparece al pasar el cursor, cuando el botón despliega su propio texto. */
+.barra-der{align-items:flex-start;gap:18px;}   /* separación suficiente para que las etiquetas no se toquen */
+.btn-ico__abajo{position:absolute;top:calc(100% + 5px);left:50%;transform:translateX(-50%);
+  font-size:8.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#fff;white-space:nowrap;
+  pointer-events:none;opacity:.85;transition:opacity .25s ease;text-shadow:0 1px 6px rgba(0,0,0,.45);}
+.barra-der:hover .btn-ico__abajo,.barra-der:focus-within .btn-ico__abajo{opacity:0;}
+/* En celular no hay cursor: las etiquetas se quedan siempre, más chicas y
+   con más aire entre los dos botones para que no se toquen. */
+@media(max-width:640px){
+  .barra-der{gap:20px;}
+  .btn-ico__abajo{font-size:8px;letter-spacing:.08em;top:calc(100% + 4px);}
+}
+
+/* G3 · Cursor: al hacer CLICK el círculo se transforma en el isotipo de
+   Mafrox; al soltar vuelve a ser círculo. Archivo del isotipo:
+   images/mafrox-isotipo-blanco.png (se usa solo su silueta). */
+@media (hover:hover) and (pointer:fine){
+  /* ENTRA y SALE con fundido suave: sin rebote ni giro.
+     Para que tarde más o menos, cambia los .34s / .40s de abajo. */
+  .cursor-punto::after{content:"";position:absolute;left:50%;top:50%;width:28px;height:28px;
+    background-color:var(--verde);
+    -webkit-mask:url(images/mafrox-isotipo-blanco.png) center/contain no-repeat;mask:url(images/mafrox-isotipo-blanco.png) center/contain no-repeat;
+    transform:translate(-50%,-50%) scale(.86);opacity:0;
+    transition:transform .40s cubic-bezier(.22,.7,.2,1),opacity .40s ease,background-color .35s ease;}
+  body.fondo-oscuro .cursor-punto::after{background-color:#fff;}
+  body.menu-abierto .cursor-punto::after{background-color:var(--lima);}
+  body.modal-contacto-abierto .cursor-punto::after{background-color:var(--verde);}
+  body.clic .cursor-punto,body.clic.sobre-link .cursor-punto{background-color:transparent!important;width:14px;height:14px;}
+  body.clic .cursor-punto::after{opacity:1;transform:translate(-50%,-50%) scale(1);
+    transition:transform .34s cubic-bezier(.22,.7,.2,1),opacity .28s ease,background-color .35s ease;}
+  body.clic .cursor-estela{opacity:0!important;transition:opacity .3s ease;}
+}
+
+/* H5 · C5 · P6 · Marquesina: se extiende hasta el borde derecho de la
+   pantalla, y por la izquierda nunca llega a la zona del menú lateral. */
+.marquee{margin-inline:calc(50% - 50vw);}   /* de lado a lado de la pantalla */
+/* Marquesina del Inicio: letra al 60% para que no pese tanto */
+.marquee--fina .marquee-track b{font-size:clamp(16px,2.5vw,32px);}
+.marquee--fina{padding:16px 0;}
+/* La cinta al PIE de la ruleta: pegada abajo, de lado a lado, sobre el
+   fondo oscuro de la sección. */
+.marquee--rueda{position:absolute;left:0;right:0;bottom:0;margin:0;z-index:4;
+  background:var(--verde-oscuro);}
+/* Cifras de H10: la primera sola y grande, las otras dos debajo */
+.cifras-h10{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 54px;}
+.cifras-h10 .cifra--grande{grid-column:1 / -1;}
+.cifras-h10 .cifra--grande b{font-size:clamp(62px,8.5vw,124px);}
+/* Las dos cifras de abajo: otro 20% más grandes (antes 36-62px) */
+.cifras-h10 .cifra:not(.cifra--grande) b{font-size:clamp(43px,5.5vw,74px);}
+/* Los rótulos de las tres cifras, un 30% más grandes (antes 13.5px) */
+.alcance-split .cifras-h10 .cifra span{font-size:17.5px;letter-spacing:.07em;margin-top:13px;}
+/* Banderas: otro 20% más grandes (antes 24px) y alineadas al borde derecho */
+.cifra-banderas{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:flex-end;}
+.bandera-pais{display:block;line-height:0;}
+.bandera-pais svg{width:29px;height:auto;display:block;border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,.22);}
+
+/* H6 · C6 · P9 · Cierre: la frase de pie usa la misma letra que el
+   título, en verde lima y más pequeña. El enlace va sin
+   subrayado, alineado a la derecha de la frase. */
+
+.cierre .cierre-pie{width:0;min-width:100%;margin:18px 0 0;font-family:var(--fuente-titulos);font-weight:600;letter-spacing:-.04em;line-height:1.05;
+  font-size:clamp(14px,2.3vw,32px);color:var(--lima);text-align:center;}   /* -40% */
+.cierre .siguiente{align-self:flex-end;border-bottom:none;padding-bottom:0;margin-top:28px;text-decoration:none;}
+
+/* ===== PIE DE PÁGINA (todas las páginas) =====
+   Una sola fila: logo · frase con palabra que rota · datos legales
+   (3 líneas, centrados) · botón magnético. */
+.pie-web{background:var(--verde-oscuro);color:var(--crema-calida);padding:56px 0;}
+/* Todo en una sola línea y centrado entre sí */
+.pie-web__fila{display:grid;grid-template-columns:auto auto 1fr auto;align-items:center;gap:4vw;}
+.pie-web__fila > *{align-self:center;}
+/* Logo: 28px de alto (el doble de la versión anterior), en gris claro */
+.pie-web__logo{display:block;line-height:0;}
+.pie-web__logo img{height:31px;width:auto;opacity:.55;filter:grayscale(1) brightness(1.6);}
+/* Frase "Carne ___" (15% más pequeña que antes) */
+/* Frase "Carne ___": 20% más pequeña, a la altura del logo */
+.pie-web .cinetico{font-size:clamp(14px,1.5vw,22px);text-align:left;white-space:nowrap;line-height:1;color:var(--crema-calida);
+  display:inline-flex;align-items:center;gap:.3em;}
+.pie-web .rotador{vertical-align:middle;}
+/* Datos legales: 3 líneas, centradas entre la frase y el botón */
+.pie-web__legal{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:2px;font-size:13px;line-height:1.55;color:rgba(var(--crema-calida-rgb),.5);}
+/* Botón "Conversemos" (15% más pequeño) */
+.pie-web .magnet-zona{padding:0;justify-content:flex-end;}
+.pie-web .magnet{padding:13px 29px;font-size:12px;}
+@media(max-width:1100px){
+  .pie-web__fila{grid-template-columns:auto 1fr auto;}
+  .pie-web__legal{grid-column:1/-1;grid-row:2;}
+}
+@media(max-width:760px){
+  .pie-web__fila{grid-template-columns:1fr;gap:24px;justify-items:start;}
+  .pie-web__legal{grid-column:auto;grid-row:auto;align-items:flex-start;text-align:left;}
+  .pie-web .magnet-zona{justify-content:flex-start;}
+}
+
+
+/* ===== G7 · MENÚ DE WHATSAPP =====
+   El verde de WhatsApp (#128c7e) está en el tono 173°, un verde AZULADO;
+   los verdes de Mafrox viven entre 85° y 144°, verdes AMARILLENTOS. Por eso
+   desentonaban. Este fondo está en el tono 141°, dentro de la familia de la
+   marca, con un filo y unas flechas en lima. El botón redondo sigue en verde
+   WhatsApp para que se reconozca de inmediato. */
+.mfx-whats-menu{background:var(--whats-popup);border:1px solid rgba(var(--lima-rgb),.28);
+  box-shadow:0 18px 44px -14px rgba(var(--sombra-verde-rgb),.55);}
+.mfx-whats-menu::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  /* tramado diagonal muy suave */
+  background:repeating-linear-gradient(135deg,rgba(var(--lima-rgb),.07) 0 2px,rgba(255,255,255,0) 2px 7px);}
+.mfx-whats-op{position:relative;color:#f2f4ea;}
+.mfx-whats-op:hover,.mfx-whats-op:focus-visible{color:#fff;background:rgba(var(--lima-rgb),.16);}
+.mfx-whats-op__flecha{color:rgba(242,244,234,.55);}
+.mfx-whats-op:hover .mfx-whats-op__flecha,.mfx-whats-op:focus-visible .mfx-whats-op__flecha{color:var(--lima);}
+
+/* ===== CURSOR · se apaga donde el cursor normal funciona mejor ===== */
+@media (hover:hover) and (pointer:fine){
+  body.modal-contacto-abierto,body.modal-contacto-abierto a,body.modal-contacto-abierto button,
+  body.sin-cursor-propio,body.sin-cursor-propio *{cursor:auto;}
+  body.modal-contacto-abierto input,body.modal-contacto-abierto textarea{cursor:text;}
+  body.modal-contacto-abierto .cursor-punto,body.modal-contacto-abierto .cursor-estela,
+  body.sin-cursor-propio .cursor-punto,body.sin-cursor-propio .cursor-estela{opacity:0!important;}
+}
+
+
+/* ==================================================================
+   ██  PIEZAS PROPIAS DE LAS PÁGINAS DE LÍNEAS  ██
+   (todo lo de arriba es igual al inicio; desde aquí es nuevo)
+   ================================================================== */
+html,body{background:var(--crema);}
+h1,h2,h3{font-family:var(--fuente-titulos);}
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* ───────────── MAPA DE CORTES ───────────── */
+.mapa-sec{padding:clamp(110px,14vh,150px) 0 70px;background:var(--crema);}
+/* Título a la izquierda y texto a la derecha. Si el título es muy largo
+   para que el texto quepa al lado («Línea Porcino»), el texto baja debajo
+   del título, pegado a la derecha (flex-wrap). */
+.mapa-sec__intro{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px 6vw;}
+.mapa-sec__intro .eyebrow{flex-basis:100%;margin-bottom:0;}
+/* Título de la página («Línea Res»…): FRASE grande · tamaños en mafrox-colores.css */
+/* Título de la página («Línea Res» / «Línea Porcino»): 120px en escritorio,
+   69px en celular (antes 86/49, se agrandó un 40%). */
+.mapa-sec h1{font-size:clamp(69px,8.9vw,120px);color:var(--verde-oscuro);text-transform:none;font-weight:600;letter-spacing:-.05em;line-height:.9;}
+.mapa-sec__bajada{flex:0 1 440px;min-width:320px;margin-left:auto;font-size:var(--t-parr);line-height:1.55;color:var(--texto-suave);}
+@media(max-width:820px){
+  .mapa-sec__bajada{flex-basis:100%;min-width:0;margin-left:0;}
+}
+
+.mapa{position:relative;max-width:min(1180px,calc((100vh - 330px) * 1.5));min-width:min(100%,320px);margin:clamp(14px,3vh,30px) auto 0;padding:0 24px;}
+.mapa__svg{display:block;width:100%;height:auto;overflow:visible;}
+/* TONOS DE LA ILUSTRACIÓN — todos salen de la paleta */
+.mapa .corte polygon{fill:var(--verde);stroke:var(--crema);stroke-width:2.2;stroke-linejoin:round;
+  transition:fill .35s ease,fill-opacity .35s ease;cursor:pointer;}
+.mapa .corte:nth-of-type(even) polygon{fill:rgba(var(--verde-rgb),.86);}
+.mapa .corte{transition:transform .7s cubic-bezier(.22,1,.36,1);outline:none;}
+.mapa .etiqueta{transition:transform .7s cubic-bezier(.22,1,.36,1);pointer-events:none;}
+.mapa .etiqueta text{fill:var(--crema-calida);font-family:var(--fuente-texto);font-size:18px;font-weight:600;letter-spacing:.01em;
+  text-anchor:middle;dominant-baseline:middle;pointer-events:none;transition:fill .3s ease;}
+.mapa .trazo{fill:none;stroke:var(--verde-oscuro);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;pointer-events:none;transition:opacity .5s ease;}
+/* Al pasar el cursor por un corte */
+.mapa .corte:hover polygon,.mapa .corte:focus-visible polygon,.mapa .corte.corte--hover polygon{fill:var(--lima);fill-opacity:.75;}
+.mapa .etiqueta.corte--hover text{fill:var(--verde-oscuro);}
+/* Con un corte elegido: los demás se apagan un poco y el elegido va en lima */
+.mapa .corte.corte--apagado polygon{fill-opacity:.42;}
+.mapa .corte.corte--activo polygon{fill:var(--lima);fill-opacity:1;}
+.mapa .etiqueta.corte--activo text{fill:var(--verde-oscuro);font-weight:700;}
+.mapa .etiqueta.corte--apagado text{opacity:.6;}
+/* Nombre alterno entre paréntesis, ej. (Ribeye) */
+.mapa .etiqueta .sub{font-weight:500;opacity:.85;}
+/* TAMAÑO DE LOS NOMBRES (en unidades del dibujo, que mide 1000 de ancho):
+   escritorio 18 · celular 34 (el dibujo se ve chico, por eso la letra es más
+   grande; si no cabe, se parte en líneas y se achica sola). */
+@media(max-width:700px){
+  .mapa{padding:0 4px;}
+  .mapa .etiqueta text{font-size:34px;font-weight:700;letter-spacing:0;}
+  .mapa .trazo{stroke-width:3.5;}
+  .mapa .corte polygon,.mapa .no-corte{stroke-width:3;}
+}
+/* TAMAÑO DEL DIBUJO (computadora): 80 % del tamaño anterior.
+   Para agrandarlo o achicarlo cambia los 2 números de cada línea
+   (944px = ancho máximo · 1.25 / 1.63 = proporción del animal × 0.8).
+   En celular el dibujo usa todo el ancho para que los nombres se lean. */
+.mapa[data-animal="res"]{max-width:min(944px,calc((100vh - 300px) * 1.25));}
+.mapa[data-animal="cerdo"]{max-width:min(944px,calc((100vh - 300px) * 1.63));}
+@media(max-width:700px){.mapa[data-animal]{max-width:none;}}
+@media(max-width:700px){.solo-escritorio{display:none;}}
+
+.mapa__pista{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;font-size:13px;letter-spacing:.06em;
+  text-transform:uppercase;font-weight:600;color:var(--verde);}
+.mapa__pulso{width:10px;height:10px;border-radius:50%;background:var(--lima);position:relative;}
+.mapa__pulso::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 0 rgba(var(--lima-rgb),.7);animation:pulsoMapa 1.8s ease-out infinite;}
+@keyframes pulsoMapa{to{box-shadow:0 0 0 14px rgba(var(--lima-rgb),0);}}
+.mapa--elegido .mapa__pista{opacity:.35;}
+
+/* Botones con los nombres de los cortes */
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:22px;scroll-padding-left:24px;}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 10px;border-radius:99px;border:1px solid rgba(var(--verde-oscuro-rgb),.18);
+  background:transparent;color:var(--verde-oscuro);font:600 13.5px/1 var(--fuente-texto);cursor:pointer;
+  transition:background-color .3s ease,color .3s ease,border-color .3s ease,transform .3s ease;}
+.chip__n{font-size:10.5px;opacity:.55;font-variant-numeric:tabular-nums;}
+.chip:hover{border-color:var(--verde);transform:translateY(-2px);}
+.chip--activo{background:var(--verde-oscuro);border-color:var(--verde-oscuro);color:var(--crema-calida);}
+.chip--activo .chip__n{color:var(--lima);opacity:1;}
+@media(max-width:700px){
+  .chips{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;
+    margin-left:0;margin-right:0;scrollbar-width:none;}
+  .chips::-webkit-scrollbar{display:none;}
+  .chip{flex:none;scroll-snap-align:start;}
+}
+
+/* Tres razones */
+/* Espacio de arriba = separación con el bloque verde anterior (87px; antes
+   124px, se acortó un 30%). Se quitó la línea gris que había sobre las razones. */
+.razones{padding:87px 0 100px;background:var(--crema);}
+.razones__fila{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4vw;}
+.razon__n{font:600 14px/1 var(--fuente-texto);color:var(--lima);letter-spacing:.06em;}
+.razon h3{font-size:var(--t-sub);font-weight:600;letter-spacing:-.035em;color:var(--verde-oscuro);margin:14px 0 10px;line-height:1.05;}
+.razon p{font-size:var(--t-parr);line-height:1.6;color:var(--texto-suave);}
+@media(max-width:820px){.razones__fila{grid-template-columns:1fr;gap:34px;}}
+
+/* Cierre de cada página de línea */
+.cierre-linea{background:var(--verde);color:#fff;padding:clamp(80px,12vh,130px) 0;text-align:center;}
+.cierre-linea h2{font-size:var(--t-frase);font-weight:600;letter-spacing:-.045em;line-height:1.02;max-width:900px;margin:0 auto;}
+.cierre-linea p{margin:18px auto 0;max-width:560px;font-size:var(--t-parr);line-height:1.55;color:rgba(255,255,255,.78);}
+.cierre-linea__btns{display:flex;justify-content:center;align-items:center;gap:28px;margin-top:38px;flex-wrap:wrap;}
+.cierre-linea .magnet{padding:18px 40px;font-size:14px;}
+
+/* ───────────── PRODUCTOS IMPORTADOS ───────────── */
+/* Entrada estilo Apple: la sección es alta y la escena se queda fija */
+/* Una sola pantalla: el efecto corre solo (antes 400vh, se movía con el scroll) */
+.apple{position:relative;height:100vh;height:100svh;background:var(--verde-oscuro);}
+.apple__escena{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;}
+.apple__escena canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.apple__escena video{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;}
+.apple__titular{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+.apple__sub{position:absolute;left:50%;top:70%;width:min(640px,86vw);margin-left:calc(min(640px,86vw) / -2);text-align:center;
+  font-size:var(--t-parr);line-height:1.5;color:var(--crema-calida);opacity:0;}
+
+.imp-intro{background:var(--crema);padding:clamp(80px,12vh,130px) 0 30px;}
+.imp-intro h2{font-size:var(--t-frase);color:var(--verde-oscuro);font-weight:600;letter-spacing:-.05em;line-height:.92;}
+.imp-intro p{max-width:620px;margin-top:22px;font-size:var(--t-parr);line-height:1.6;color:var(--texto-suave);}
+
+/* Bloques (como en el esquema): bandas anchas, una debajo de otra */
+.bloques{background:var(--crema);padding:30px 0 110px;}
+.bloques__lista{display:flex;flex-direction:column;gap:14px;}
+.bloque{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) clamp(140px,22vw,300px) auto;align-items:center;gap:clamp(16px,3vw,44px);
+  width:100%;min-height:clamp(150px,22vh,220px);padding:22px clamp(20px,3vw,44px);border:0;border-radius:18px;text-align:left;cursor:pointer;
+  background:var(--verde);color:#fff;overflow:hidden;isolation:isolate;
+  transition:background-color .45s ease,transform .45s cubic-bezier(.22,1,.36,1);}
+.bloque:nth-child(even){background:var(--verde-oscuro);}
+.bloque::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(var(--lima-rgb),.0) 30%,rgba(var(--lima-rgb),.18));opacity:0;transition:opacity .45s ease;z-index:-1;}
+.bloque:hover{transform:translateY(-3px);}
+.bloque:hover::before,.bloque:focus-visible::before{opacity:1;}
+.bloque:focus-visible{outline:2px solid var(--lima);outline-offset:4px;}
+.bloque__n{font:600 14px/1 var(--fuente-texto);color:var(--lima);letter-spacing:.06em;align-self:start;margin-top:8px;}
+.bloque__txt{display:flex;flex-direction:column;gap:10px;}
+/* Título de cada bloque: FRASE grande */
+.bloque__titulo{font:600 var(--t-frase)/.95 var(--fuente-titulos);letter-spacing:-.045em;}
+.bloque__corto{font-size:var(--t-parr);line-height:1.5;color:rgba(255,255,255,.72);max-width:440px;}
+.bloque__foto{display:block;align-self:stretch;border-radius:12px;overflow:hidden;margin:-4px 0;}
+.bloque__foto img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);transition:transform .8s cubic-bezier(.22,1,.36,1);}
+.bloque:hover .bloque__foto img{transform:scale(1.14);}
+.bloque__mas{width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.4);display:grid;place-items:center;
+  transition:background-color .35s,color .35s,border-color .35s,transform .45s cubic-bezier(.22,1,.36,1);}
+.bloque:hover .bloque__mas{background:var(--lima);border-color:var(--lima);color:var(--verde-oscuro);transform:rotate(90deg);}
+@media(max-width:760px){
+  .bloque{grid-template-columns:auto 1fr auto;grid-template-rows:auto auto;min-height:0;padding:20px;}
+  .bloque__foto{grid-column:1/-1;grid-row:2;height:150px;margin:6px 0 0;}
+  .bloque__corto{display:none;}
+  .bloque__mas{width:38px;height:38px;}
+}
+
+/* Ficha a pantalla completa */
+.fimp{position:fixed;inset:0;z-index:180;background:var(--verde-oscuro);color:#fff;clip-path:inset(0 0 0 0);}
+.fimp[hidden]{display:none;}
+.fimp__cerrar{position:absolute;top:22px;right:22px;z-index:3;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.4);
+  background:rgba(var(--verde-oscuro-rgb),.5);color:#fff;font-size:17px;cursor:pointer;display:grid;place-items:center;transition:background-color .3s,color .3s,transform .4s;}
+.fimp__cerrar:hover{background:var(--lima);color:var(--verde-oscuro);transform:rotate(90deg);}
+.fimp__cont{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);}
+.fimp__panel{display:flex;flex-direction:column;justify-content:center;padding:110px clamp(24px,5vw,80px) 50px;overflow-y:auto;}
+.fimp__titulo{font-size:var(--t-titulo);font-weight:600;letter-spacing:-.05em;line-height:.95;margin:4px 0 22px;}
+.fimp__texto{font-size:var(--t-parr);line-height:1.6;color:var(--texto-suave-oscuro);max-width:520px;}
+.fimp__frase{margin-top:22px;font:600 clamp(20px,2vw,30px)/1.15 var(--fuente-titulos);letter-spacing:-.03em;color:var(--lima);max-width:520px;}
+.fimp__lista{list-style:none;margin:26px 0 0;display:grid;gap:10px;}
+.fimp__lista li{display:flex;gap:12px;align-items:center;font-size:var(--t-parr);color:var(--crema-calida);}
+.fimp__lista li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--lima);flex:none;}
+/* Zona del botón Cotiza: franja crema, como en el esquema */
+.fimp__cta{margin-top:34px;display:flex;justify-content:flex-start;max-width:520px;}
+.fimp__cotiza{padding:18px 44px;font-size:15px;}
+.fimp__carrusel{position:relative;overflow:hidden;background:#000;}
+.fimp__foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);
+  transition:opacity .9s ease,transform 4.5s ease-out;}
+.fimp__foto.activa{opacity:1;transform:scale(1);}
+.fimp__control{position:absolute;left:24px;bottom:24px;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:99px;
+  background:rgba(var(--verde-oscuro-rgb),.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
+.fimp__btn{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;font-size:18px;line-height:1;cursor:pointer;display:grid;place-items:center;}
+.fimp__btn:hover{background:#fff;color:var(--verde-oscuro);}
+.fimp__pausa span{width:9px;height:11px;border-left:2.5px solid currentColor;border-right:2.5px solid currentColor;}
+.fimp--pausa .fimp__pausa span{width:0;height:0;border:0;border-left:9px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:3px;}
+.fimp__puntos{display:flex;gap:6px;margin-left:6px;}
+.fimp__punto{position:relative;width:26px;height:4px;border:0;border-radius:99px;padding:0;background:rgba(255,255,255,.3);overflow:hidden;cursor:pointer;}
+.fimp__punto i{position:absolute;inset:0;background:var(--lima);transform:scaleX(0);transform-origin:left;}
+.fimp__punto.visto i{transform:scaleX(1)!important;}
+@media(max-width:820px){
+  .fimp__cont{grid-template-columns:1fr;grid-template-rows:42vh auto;overflow-y:auto;position:absolute;}
+  .fimp__carrusel{grid-row:1;}
+  .fimp__panel{grid-row:2;padding:30px 22px 40px;justify-content:flex-start;overflow:visible;}
+  .fimp__control{left:50%;transform:translateX(-50%);bottom:14px;}
+}
+/* FICHA ABIERTA (Importados): la barra superior (logo, Contacto, Menú),
+   WhatsApp y el cursor de bola se ESCONDEN del todo (visibility:hidden),
+   así nada puede tomar el clic y la X siempre cierra la ficha.
+   Antes solo se ponían transparentes y los botones seguían recibiendo
+   el clic justo encima de la X. Mientras tanto se usa el cursor normal. */
+body.ficha-abierta .barra-sup,body.ficha-abierta #mfxWhatsWrap,
+body.ficha-abierta .cursor-punto,body.ficha-abierta .cursor-estela{opacity:0!important;visibility:hidden!important;}
+body.ficha-abierta,body.ficha-abierta *{cursor:auto!important;}
+body.ficha-abierta button,body.ficha-abierta a{cursor:pointer!important;}
+
+/* ==================================================================
+   AJUSTES 1 NOV · intro del animal, foto que se agranda, ficha a todo
+   lo ancho con receta, cursor visible en cualquier fondo, "Scroll down"
+   ================================================================== */
+
+/* ── Intro del animal (estilo Marvel) ── */
+.intro-animal{position:fixed;inset:0;z-index:400;display:none;background:var(--crema);}
+html.intro-animal-activa .intro-animal{display:block;}
+html.intro-animal-activa body{overflow:hidden;}
+html.intro-animal-activa .barra-sup .marca img{visibility:hidden;}
+html.intro-animal-activa #mfxWhatsWrap,html.intro-animal-activa .cursor-punto,html.intro-animal-activa .cursor-estela{opacity:0!important;}
+.intro-animal canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.intro-animal video{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;}
+/* "Saltar intro": abajo AL CENTRO (a la derecha lo tapaba el botón de WhatsApp) */
+.intro-saltar{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(22px + env(safe-area-inset-bottom,0px));white-space:nowrap;
+  background:none;border:0;padding:10px;cursor:pointer;font:600 11px/1 var(--fuente-texto);letter-spacing:.2em;text-transform:uppercase;color:var(--verde);opacity:.75;}
+.intro-saltar:hover{opacity:1;}
+
+/* ── Partes del dibujo que no son cortes (cabeza, cola) ── */
+.mapa .no-corte{fill:var(--verde-oscuro);stroke:var(--crema);stroke-width:2.2;}
+.mapa .corte polygon{transition:fill .35s ease,fill-opacity .45s ease;}
+
+/* ── Foto del corte que se agranda ── */
+.pieza{position:absolute;left:50%;top:50%;width:0;height:0;margin:0;z-index:3;opacity:0;pointer-events:none;cursor:pointer;}
+.pieza--visible{pointer-events:auto;}
+.pieza img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%;
+  box-shadow:0 0 0 5px var(--lima),0 0 0 11px rgba(var(--lima-rgb),.22),0 30px 60px -18px rgba(var(--sombra-verde-rgb),.6);}
+.pieza figcaption{position:absolute;left:50%;top:calc(100% + 16px);transform:translateX(-50%);white-space:nowrap;
+  background:var(--verde-oscuro);color:var(--crema-calida);font:600 15px/1 var(--fuente-texto);letter-spacing:-.01em;padding:10px 16px;border-radius:99px;}
+.pieza figcaption::after{content:" ↓";color:var(--lima);}
+.mapa--elegido .corte:not(.corte--activo) polygon{fill-opacity:.35;}
+.mapa--elegido .etiqueta:not(.corte--activo) text{opacity:.35;}
+
+/* ── Ficha del corte: franja oscura DE LADO A LADO ── */
+.ficha-corte{background:var(--verde-oscuro);color:var(--crema-calida);padding:clamp(56px,8vh,90px) 0;}
+.ficha-corte[hidden]{display:none;}
+.ficha-corte__cab{display:grid;grid-template-columns:auto minmax(0,1.1fr) minmax(0,1fr) auto;gap:clamp(18px,3vw,44px);align-items:start;
+  padding-bottom:clamp(26px,4vh,40px);border-bottom:1px solid rgba(255,255,255,.12);}
+.ficha-corte__n{font:600 clamp(44px,5vw,76px)/.9 var(--fuente-titulos);letter-spacing:-.05em;color:var(--lima);}
+.ficha-corte__nombre h3{font-size:var(--t-titulo);font-weight:600;letter-spacing:-.045em;line-height:.98;color:#fff;margin-bottom:12px;}
+.ficha-corte__nombre h3 small{display:block;font-size:.42em;font-weight:500;letter-spacing:-.01em;color:var(--lima);margin-top:8px;}
+.ficha-corte__nombre p,.ficha-corte__usos p{font-size:var(--t-parr);line-height:1.55;color:var(--texto-suave-oscuro);}
+.ficha-corte__usos p{color:var(--crema-calida);}
+.ficha-corte .eyebrow{color:var(--lima);margin-bottom:10px;}
+.ficha-corte__cotiza{padding:15px 30px;font-size:13px;align-self:center;white-space:nowrap;}
+.ficha-corte__cuerpo{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);padding-top:clamp(26px,4vh,40px);}
+.coccion__det{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:center;}
+.coccion__foto{margin:0;border-radius:14px;overflow:hidden;aspect-ratio:4/3;background:rgba(255,255,255,.06);}
+.coccion__foto img{width:100%;height:100%;object-fit:cover;}
+.coccion__txt h4{font:600 var(--t-sub)/1.08 var(--fuente-titulos);letter-spacing:-.03em;color:#fff;margin-bottom:10px;}
+.coccion__txt p{font-size:var(--t-parr);line-height:1.6;color:var(--texto-suave-oscuro);}
+.metodos{display:flex;gap:8px;margin:4px 0 20px;flex-wrap:wrap;}
+.metodo{display:inline-flex;align-items:center;gap:9px;padding:11px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:var(--crema-calida);font:600 14.5px/1 var(--fuente-texto);cursor:pointer;transition:background-color .3s,color .3s,border-color .3s;}
+.metodo small{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.6;font-weight:600;}
+.metodo:hover:not(:disabled){border-color:var(--lima);}
+.metodo--activo{background:var(--lima);border-color:var(--lima);color:var(--verde-oscuro);}
+.metodo:disabled{opacity:.38;cursor:not-allowed;}
+.metodo__ico{width:21px;height:21px;flex:none;background:currentColor;-webkit-mask:var(--ico) center/contain no-repeat;mask:var(--ico) center/contain no-repeat;}
+.metodo__ico--freir{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cellipse cx='10' cy='14' rx='8' ry='4'/%3E%3Cpath d='M18 13l5-2M6 7c0-2 2-2 2-4M10 7c0-2 2-2 2-4'/%3E%3C/svg%3E");}
+.metodo__ico--parrilla{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M3 11h18M5 11a7 7 0 0014 0M8 4v4M12 3v5M16 4v4M8 18l-2 4M16 18l2 4'/%3E%3C/svg%3E");}
+.metodo__ico--plancha{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Crect x='2' y='12' width='20' height='5' rx='1.5'/%3E%3Cpath d='M7 9c0-2 2-2 2-4M12 9c0-2 2-2 2-4M17 9c0-2 2-2 2-4'/%3E%3C/svg%3E");}
+/* Receta en resumen compacto */
+.receta{border-left:1px solid rgba(255,255,255,.12);padding-left:clamp(20px,3vw,44px);}
+/* Corte sin Freír/Parrilla/Plancha: la receta ocupa todo el ancho.
+   Ingredientes en 3 columnas para aprovechar el espacio. */
+.ficha-corte__cuerpo--solo-receta{grid-template-columns:1fr;}
+.ficha-corte__cuerpo--solo-receta .receta{border-left:0;padding-left:0;border-top:0;padding-top:0;}
+.ficha-corte__cuerpo--solo-receta .receta__ing{columns:3;}
+@media(max-width:820px){.ficha-corte__cuerpo--solo-receta .receta__ing{columns:1;}}
+.receta__nombre{font:600 var(--t-titulo)/1.02 var(--fuente-titulos);letter-spacing:-.04em;color:#fff;margin:2px 0 16px;}
+.receta__sub{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--texto-suave-oscuro);margin-bottom:10px;}
+.receta__ing{list-style:none;columns:2;column-gap:22px;margin-bottom:20px;}
+.receta__ing li{break-inside:avoid;position:relative;padding:0 0 6px 14px;font-size:var(--t-parr);line-height:1.4;color:var(--crema-calida);}
+.receta__ing li::before{content:"";position:absolute;left:0;top:.55em;width:5px;height:5px;border-radius:50%;background:var(--lima);}
+.receta__prep{font-size:var(--t-parr);line-height:1.6;color:var(--texto-suave-oscuro);}
+@media(max-width:640px){.receta__ing{columns:1;}}
+@media(max-width:980px){
+  .ficha-corte__cab{grid-template-columns:auto minmax(0,1fr);}
+  .ficha-corte__usos{grid-column:1/-1;}
+  .ficha-corte__cotiza{grid-column:1/-1;justify-self:start;}
+  .ficha-corte__cuerpo{grid-template-columns:1fr;}
+  .receta{border-left:0;padding-left:0;border-top:1px solid rgba(255,255,255,.12);padding-top:26px;}
+}
+@media(max-width:640px){
+  .coccion__det{grid-template-columns:1fr;}
+  .metodo{flex:1 1 0;justify-content:center;padding:11px 6px;font-size:13.5px;flex-direction:column;gap:6px;}
+  .pieza figcaption{font-size:13px;padding:8px 13px;top:calc(100% + 10px);}
+}
+
+/* ── Cursor: visible sobre cualquier fondo ──
+   El color lo decide lo que hay DEBAJO del cursor (clase .cur-claro). */
+@media (hover:hover) and (pointer:fine){
+  body.fondo-oscuro .cursor-punto,body.fondo-oscuro .cursor-estela{background-color:var(--verde);}
+  body.cur-claro .cursor-punto,body.cur-claro .cursor-estela{background-color:#fff;}
+  .cursor-punto{box-shadow:0 0 0 1.5px rgba(var(--crema-rgb),.85);}
+  body.cur-claro .cursor-punto{box-shadow:0 0 0 1.5px rgba(var(--sombra-verde-rgb),.55);}
+  body.sobre-link .cursor-punto{background-color:var(--lima);}
+  body.fondo-oscuro .cursor-punto::after{background-color:var(--verde);}
+  body.cur-claro .cursor-punto::after{background-color:#fff;}
+}
+
+/* ── Importados: el lienzo aparece cuando ya hay video (sin pestañeo) ── */
+.apple__escena canvas{opacity:0;transition:opacity .7s ease;}
+.apple--listo .apple__escena canvas{opacity:1;}
+/* Indicador "Desliza hacia abajo" — abajo al centro, bien visible y en
+   movimiento constante para invitar a bajar:
+   · todo el indicador sube y baja suave (sdRebote)
+   · el punto lima recorre la línea de arriba hacia abajo (sdBaja)
+   · debajo, una flecha que cae y se desvanece una y otra vez (sdFlecha)
+   POSICIÓN: "bottom" = distancia al borde de abajo.
+   TAMAÑO: font-size del texto, height de la línea.
+   VELOCIDAD: los segundos de cada "animation". */
+.scroll-down{position:absolute;left:50%;bottom:4vh;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;
+  color:#fff;opacity:0;transition:opacity .4s ease;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.55);}
+.scroll-down__txt{font:600 14px/1 var(--fuente-texto);letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;
+  animation:sdRebote 2s ease-in-out infinite;}
+/* Línea (la "vía") y el punto de luz que la recorre */
+.scroll-down__linea{position:relative;width:3px;height:58px;border-radius:3px;background:rgba(255,255,255,.45);overflow:hidden;
+  animation:sdRebote 2s ease-in-out infinite;}
+.scroll-down__linea i{position:absolute;left:0;top:0;width:3px;height:24px;border-radius:2px;background:var(--lima);
+  box-shadow:0 0 10px var(--lima),0 0 18px var(--lima);animation:sdBaja 1.4s cubic-bezier(.65,0,.35,1) infinite;}
+/* Flecha lima debajo de la línea */
+.scroll-down::after{content:"";width:18px;height:18px;margin-top:-12px;border-right:3px solid var(--lima);border-bottom:3px solid var(--lima);
+  filter:drop-shadow(0 0 6px rgba(var(--lima-rgb),.8));animation:sdFlecha 1.4s ease-in infinite;}
+@keyframes sdBaja{0%{transform:translateY(-20px);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translateY(58px);opacity:0}}
+@keyframes sdRebote{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+@keyframes sdFlecha{0%{transform:translateY(-6px) rotate(45deg);opacity:.35}40%{opacity:1}100%{transform:translateY(12px) rotate(45deg);opacity:.15}}
+@media(max-width:760px){.scroll-down{bottom:calc(3vh + env(safe-area-inset-bottom,0px));}}
+@media(prefers-reduced-motion:reduce){.scroll-down *,.scroll-down::after{animation:none!important;}.scroll-down__linea i{top:19px;}.scroll-down::after{transform:rotate(45deg);}}

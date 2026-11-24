@@ -1,0 +1,5 @@
+MODELO X · copia de respaldo de la web MAFROX (24-nov-2026)
+
+Contiene todo el código (HTML, CSS, JS, robots, sitemap, llms) SIN la carpeta images/.
+Esta carpeta NO se publica en el hosting: solo queda guardada en GitHub.
+Para usarla en otra web: copia estos archivos y agrega una carpeta images/ con las fotos y videos.
