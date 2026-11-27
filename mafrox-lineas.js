@@ -86,6 +86,7 @@
   });
   /* "Contáctanos" del menú abre el formulario */
   var mc = document.getElementById('menuContacto');
+  if(mc) mc.dataset.manejado = '1';
   if(mc) mc.addEventListener('click', function(e){
     e.preventDefault(); cerrarMenu();
     setTimeout(function(){ if(window.mafroxAbrirContacto) window.mafroxAbrirContacto(); }, 350);

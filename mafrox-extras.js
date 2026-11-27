@@ -1391,6 +1391,18 @@
   }
   window.mafroxAbrirContacto = abrirContacto;
 
+  /* "Contáctanos" del MENÚ (todas las páginas): cierra el menú y abre el
+     formulario. En las páginas de líneas lo maneja mafrox-lineas.js
+     (marca el enlace con data-manejado="1"), así no se abre dos veces. */
+  var menuContacto = document.getElementById('menuContacto');
+  if(menuContacto) menuContacto.addEventListener('click', function(e){
+    e.preventDefault();
+    if(menuContacto.dataset.manejado) return;
+    var cerrar = document.getElementById('closeBtn');
+    if(cerrar) cerrar.click();
+    setTimeout(abrirContacto, 450);
+  });
+
   /* ================================================================
      3) BOTÓN FLOTANTE DE WHATSAPP  (ícono de Mafrox)
         Al hacer click, del botón nace un pequeño menú con dos
