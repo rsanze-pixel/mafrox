@@ -647,8 +647,8 @@ h1,h2,h3{font-family:var(--fuente-titulos);}
    Para agrandarlo o achicarlo cambia los 2 números de cada línea
    (944px = ancho máximo · 1.25 / 1.63 = proporción del animal × 0.8).
    En celular el dibujo usa todo el ancho para que los nombres se lean. */
-.mapa[data-animal="res"]{max-width:min(944px,calc((100vh - 300px) * 1.25));}
-.mapa[data-animal="cerdo"]{max-width:min(944px,calc((100vh - 300px) * 1.63));}
+.mapa[data-animal="res"]{max-width:min(944px,calc((100vh - 300px) * 1.26));}
+.mapa[data-animal="cerdo"]{max-width:min(944px,calc((100vh - 300px) * 1.64));}
 @media(max-width:700px){.mapa[data-animal]{max-width:none;}}
 @media(max-width:700px){.solo-escritorio{display:none;}}
 
